@@ -55,6 +55,34 @@ where auth_user.id = profile.id
   and profile.name = 'Pengguna'
   and nullif(auth_user.raw_user_meta_data ->> 'name', '') is not null;
 
+create or replace function public.update_my_profile_name(new_name text)
+returns void
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  normalized_name text := nullif(btrim(new_name), '');
+begin
+  if auth.uid() is null then
+    raise exception 'Login required';
+  end if;
+  if normalized_name is null or char_length(normalized_name) > 80 then
+    raise exception 'Name must be between 1 and 80 characters';
+  end if;
+
+  update public.profiles
+  set name = normalized_name
+  where id = (select auth.uid());
+  if not found then
+    raise exception 'Profile not found';
+  end if;
+end;
+$$;
+
+revoke all on function public.update_my_profile_name(text) from public, anon;
+grant execute on function public.update_my_profile_name(text) to authenticated;
+
 alter table public.profiles enable row level security;
 alter table public.materials enable row level security;
 alter table public.messages enable row level security;
