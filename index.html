@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduConnect - Ruang Pembelajaran Digital</title>
+  <style>
+    :root {
+      --navy: #17345f;
+      --blue: #2867b2;
+      --light-blue: #eaf2ff;
+      --pale: #f5f8ff;
+      --text: #1d2b45;
+      --muted: #64748b;
+      --white: #ffffff;
+      --border: #dce6f5;
+      --green: #16845b;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background: var(--pale);
+    }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .topbar {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 15px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .brand {
+      color: var(--navy);
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -.5px;
+    }
+    .brand span { color: var(--blue); }
+    .nav { display: flex; gap: 10px; flex-wrap: wrap; }
+    .nav button {
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      padding: 9px 12px;
+      border-radius: 9px;
+    }
+    .nav button:hover { background: var(--light-blue); }
+    .profile-menu { position: relative; }
+    .profile-button {
+      display: flex !important;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--border) !important;
+      background: white !important;
+      color: var(--navy) !important;
+      font-weight: 700;
+    }
+    .profile-avatar {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: white;
+      background: var(--blue);
+    }
+    .profile-dropdown {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      min-width: 180px;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: white;
+      box-shadow: 0 12px 28px rgba(23,52,95,.12);
+    }
+    .profile-dropdown button { width: 100%; text-align: left; }
+    .profile-dropdown button:last-child {
+      color: #a52c2c;
+    }
+    .container { width: min(1050px, 90%); margin: 35px auto; }
+    .hero {
+      background: linear-gradient(120deg, #fff 15%, #e5efff 100%);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 55px 35px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(23,52,95,.06);
+    }
+    .eyebrow {
+      color: var(--blue);
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+    h1 { color: var(--navy); font-size: clamp(30px, 5vw, 48px); margin: 12px 0; }
+    h2 { color: var(--navy); margin-top: 0; }
+    .hero p { color: var(--muted); line-height: 1.7; max-width: 620px; margin: 0 auto; }
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      max-width: 700px;
+      margin: 32px auto 0;
+    }
+    .role-card {
+      text-align: left;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      padding: 23px;
+      transition: .2s;
+    }
+    .role-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(23,52,95,.10); }
+    .role-icon { font-size: 32px; }
+    .role-card h3 { color: var(--navy); margin: 12px 0 7px; }
+    .role-card p { font-size: 14px; margin: 0 0 17px; }
+    .primary, .secondary, .danger {
+      border: 0; border-radius: 10px; padding: 11px 16px; font-weight: 700;
+    }
+    .primary { background: var(--blue); color: white; }
+    .primary:hover { background: var(--navy); }
+    .secondary { background: var(--light-blue); color: var(--navy); }
+    .danger { background: #fff0f0; color: #a52c2c; }
+    .page-title { margin-bottom: 8px; }
+    .subtitle { color: var(--muted); margin-top: 0; line-height: 1.6; }
+    .layout {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .sidebar {
+      background: var(--navy);
+      color: white;
+      border-radius: 16px;
+      padding: 18px;
+    }
+    .sidebar h3 { margin: 0 0 15px; }
+    .sidebar button {
+      display: block; width: 100%; text-align: left;
+      border: 0; border-radius: 9px; padding: 12px;
+      margin: 5px 0; background: transparent; color: white;
+    }
+    .sidebar button:hover, .sidebar button.active { background: #2d5f9d; }
+    .panel {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 7px 22px rgba(23,52,95,.04);
+    }
+    .panel + .panel { margin-top: 18px; }
+    .form-group { margin: 15px 0; }
+    label { display: block; font-weight: 700; margin-bottom: 7px; font-size: 14px; }
+    input, textarea {
+      width: 100%; border: 1px solid var(--border); border-radius: 10px;
+      padding: 12px; outline: none; background: #fbfdff;
+    }
+    input:focus, textarea:focus { border-color: var(--blue); }
+    textarea { min-height: 120px; resize: vertical; }
+    .material {
+      border: 1px solid var(--border); border-radius: 13px;
+      padding: 17px; margin-top: 13px; background: #fff;
+    }
+    .material h3 { color: var(--navy); margin: 0 0 7px; }
+    .material p { color: var(--muted); line-height: 1.6; white-space: pre-wrap; }
+    .material small { color: var(--muted); }
+    .material-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .question {
+      border: 1px solid var(--border); border-radius: 13px;
+      padding: 17px; margin: 15px 0;
+    }
+    .option { display: block; padding: 9px 10px; border-radius: 8px; margin-top: 5px; }
+    .option:hover { background: var(--pale); }
+    .option input { width: auto; margin-right: 8px; }
+    .notice {
+      background: #effaf5; border: 1px solid #c8eadb; color: #176044;
+      padding: 13px; border-radius: 10px; margin: 15px 0;
+    }
+    .empty {
+      border: 1px dashed #b9cbe3; border-radius: 12px;
+      padding: 25px; text-align: center; color: var(--muted);
+    }
+    .hidden { display: none !important; }
+    .login-shell {
+      max-width: 920px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      min-height: 520px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: white;
+      box-shadow: 0 16px 40px rgba(23,52,95,.09);
+    }
+    .login-brand {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 38px;
+      color: white;
+      background: linear-gradient(145deg, var(--navy), var(--blue));
+    }
+    .login-brand .brand { color: white; }
+    .login-brand .brand span { color: #bcd7ff; }
+    .login-brand h2 { color: white; font-size: 34px; margin: 35px 0 12px; }
+    .login-brand p { line-height: 1.7; color: #dceaff; margin: 0; }
+    .login-brand small { color: #dceaff; }
+    .login-form-wrap { padding: 42px; align-self: center; }
+    .login-form-wrap h2 { font-size: 30px; }
+    .login-role {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 18px 0 24px;
+      padding: 5px;
+      border-radius: 12px;
+      background: var(--pale);
+    }
+    .login-role button {
+      border: 0;
+      border-radius: 9px;
+      padding: 10px;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .login-role button.active { background: white; color: var(--blue); box-shadow: 0 2px 8px rgba(23,52,95,.08); }
+    .password-row { position: relative; }
+    .password-row input { padding-right: 80px; }
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 0;
+      background: transparent;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .login-submit { width: 100%; margin-top: 8px; padding: 13px; }
+    .login-back { display: block; margin: 14px auto 0; border: 0; background: transparent; color: var(--muted); }
+    .login-error { color: #a52c2c; font-size: 13px; min-height: 18px; margin: 8px 0; }
+    .account-toggle {
+      width: 100%;
+      margin-top: 12px;
+      border: 0;
+      background: transparent;
+      color: var(--blue);
+      font-weight: 700;
+    }
+    .chat-box {
+      max-height: 430px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: #f9fbff;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+    .chat-message {
+      max-width: 82%;
+      margin: 9px 0;
+      padding: 12px 14px;
+      border-radius: 12px 12px 12px 4px;
+      background: white;
+      border: 1px solid var(--border);
+    }
+    .chat-message.mine {
+      margin-left: auto;
+      border: 0;
+      border-radius: 12px 12px 4px 12px;
+      color: white;
+      background: var(--blue);
+    }
+    .chat-message small { display: block; margin-bottom: 4px; color: var(--muted); font-weight: 700; }
+    .chat-message.mine small { color: #dceaff; }
+    .chat-message p { margin: 0; line-height: 1.5; white-space: pre-wrap; }
+    footer { text-align: center; color: var(--muted); padding: 25px 10px; font-size: 13px; }
+    @media (max-width: 700px) {
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .role-grid { grid-template-columns: 1fr; }
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { display: flex; flex-wrap: wrap; gap: 5px; }
+      .sidebar h3 { width: 100%; }
+      .sidebar button { width: auto; flex: 1; text-align: center; }
+      .hero { padding: 38px 20px; }
+      .panel { padding: 18px; }
+      .login-shell { grid-template-columns: 1fr; }
+      .login-brand { min-height: 190px; padding: 28px; }
+      .login-brand h2 { font-size: 26px; margin: 20px 0 8px; }
+      .login-brand small { display: none; }
+      .login-form-wrap { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">◆ Edu<span>Connect</span></div>
+    <nav class="nav">
+      <button onclick="showHome()">Beranda</button>
+      <button onclick="showAbout()">Tentang</button>
+      <button id="headerLoginButton" onclick="openLogin()">Masuk</button>
+      <div id="headerProfile" class="profile-menu hidden">
+        <button class="profile-button" type="button" onclick="toggleProfileMenu()" aria-expanded="false">
+          <span id="profileAvatar" class="profile-avatar">U</span>
+          <span id="profileName">Pengguna</span>
+        </button>
+        <div id="profileDropdown" class="profile-dropdown hidden">
+          <button type="button" onclick="openDashboard()">Dashboard</button>
+          <button type="button" onclick="logout()">Keluar</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div id="appStatus" class="notice hidden" aria-live="polite"></div>
+    <!-- HALAMAN BERANDA -->
+    <section id="homePage">
+      <div class="hero">
+        <div class="eyebrow">Ruang Pembelajaran Digital</div>
+        <h1>Selamat Datang di EduConnect</h1>
+        <p>Media pembelajaran digital yang membantu dosen membagikan materi dan mahasiswa belajar dengan lebih mudah.</p>
+        <div class="role-grid">
+          <div class="role-card">
+            <div class="role-icon">👨‍🏫</div>
+            <h3>Dosen</h3>
+            <p>Tambahkan dan kelola materi pembelajaran untuk mahasiswa.</p>
+            <button class="primary" onclick="openLogin('lecturer')">Masuk sebagai Dosen →</button>
+          </div>
+          <div class="role-card">
+            <div class="role-icon">🎓</div>
+            <h3>Mahasiswa</h3>
+            <p>Baca materi pembelajaran dan kerjakan kuis literasi digital.</p>
+            <button class="primary" onclick="openLogin('student')">Masuk sebagai Mahasiswa →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HALAMAN TENTANG -->
+    <section id="aboutPage" class="panel hidden">
+      <h2>Tentang EduConnect</h2>
+      <p class="subtitle">EduConnect merupakan rancangan media pembelajaran digital untuk mendukung kegiatan belajar di pendidikan tinggi.</p>
+      <p><b>Tujuan:</b> mempermudah dosen membagikan materi dan membantu mahasiswa mengakses materi serta menguji pemahamannya.</p>
+      <button class="secondary" onclick="showHome()">← Kembali ke Beranda</button>
+    </section>
+
+    <!-- HALAMAN LOGIN -->
+    <section id="loginPage" class="hidden">
+      <div class="login-shell">
+        <div class="login-brand">
+          <div class="brand">◆ Edu<span>Connect</span></div>
+          <div>
+            <h2>Belajar lebih mudah.</h2>
+            <p>Masuk untuk mengakses materi pembelajaran dan aktivitas EduConnect.</p>
+          </div>
+          <small>Media Pembelajaran Digital</small>
+        </div>
+        <div class="login-form-wrap">
+          <div class="eyebrow">Selamat datang kembali</div>
+          <h2 id="loginTitle">Masuk ke Akun</h2>
+          <div class="login-role" aria-label="Pilih peran">
+            <button id="lecturerRoleButton" type="button" class="active" onclick="selectLoginRole('lecturer')">Dosen</button>
+            <button id="studentRoleButton" type="button" onclick="selectLoginRole('student')">Mahasiswa</button>
+          </div>
+          <form id="loginForm">
+            <div id="registerNameGroup" class="form-group hidden">
+              <label for="registerName">Nama Lengkap</label>
+              <input id="registerName" type="text" placeholder="Masukkan nama lengkap" autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label for="loginEmail">Email</label>
+              <input id="loginEmail" type="email" placeholder="nama@email.com" autocomplete="username" required>
+            </div>
+            <div class="form-group">
+              <label for="loginPassword">Kata Sandi</label>
+              <div class="password-row">
+                <input id="loginPassword" type="password" placeholder="Masukkan kata sandi" autocomplete="current-password" minlength="6" required>
+                <button class="password-toggle" type="button" onclick="togglePassword()" aria-label="Tampilkan atau sembunyikan kata sandi">Tampil</button>
+              </div>
+            </div>
+            <div id="confirmPasswordGroup" class="form-group hidden">
+              <label for="confirmPassword">Konfirmasi Kata Sandi</label>
+              <input id="confirmPassword" type="password" placeholder="Ulangi kata sandi" autocomplete="new-password" minlength="6">
+            </div>
+            <div id="loginError" class="login-error" aria-live="polite"></div>
+            <button id="loginSubmitButton" class="primary login-submit" type="submit">Masuk</button>
+          </form>
+          <button id="accountToggle" class="account-toggle" type="button" onclick="toggleAccountMode()">Belum punya akun? Buat akun baru</button>
+          <button class="login-back" type="button" onclick="showHome()">← Kembali ke Beranda</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- HALAMAN DOSEN -->
+    <section id="lecturerPage" class="hidden">
+      <h2 class="page-title">Dashboard Dosen</h2>
+      <p class="subtitle">Kelola dan bagikan materi pembelajaran kepada mahasiswa.</p>
+      <div class="layout">
+        <aside class="sidebar">
+          <h3>Menu Dosen</h3>
+          <button class="active" onclick="showLecturerSection('lecturerDashboard', this)">⌂ Dashboard</button>
+          <button onclick="showLecturerSection('addMaterialSection', this)">＋ Tambah Materi</button>
+          <button onclick="showLecturerSection('lecturerMaterialsSection', this); renderLecturerMaterials()">☷ Daftar Materi</button>
+          <button onclick="showLecturerSection('lecturerDiscussionSection', this); renderDiscussion()">💬 Diskusi</button>
+          <button onclick="showHome()">↩ Beranda</button>
+        </aside>
+        <div>
+          <div id="lecturerDashboard" class="panel">
+            <h2>Halo, Dosen!</h2>
+            <p class="subtitle">Selamat datang di ruang pengelolaan materi EduConnect.</p>
+            <div class="notice">Gunakan menu <b>Tambah Materi</b> untuk membagikan materi pembelajaran.</div>
+            <button class="primary" onclick="showLecturerSection('addMaterialSection', document.querySelectorAll('#lecturerPage .sidebar button')[1])">＋ Tambah Materi Baru</button>
+            <p id="lecturerCount" class="subtitle"></p>
+          </div>
+
+          <div id="addMaterialSection" class="panel hidden">
+            <h2>Tambah Materi</h2>
+            <p class="subtitle">Isi informasi materi yang ingin dibagikan.</p>
+            <form id="materialForm">
+              <div class="form-group">
+                <label for="materialTitle">Judul Materi</label>
+                <input id="materialTitle" type="text" placeholder="Contoh: Pengenalan Literasi Digital" required>
+              </div>
+              <div class="form-group">
+                <label for="materialDescription">Deskripsi Singkat</label>
+                <input id="materialDescription" type="text" placeholder="Tuliskan ringkasan materi" required>
+              </div>
+              <div class="form-group">
+                <label for="materialContent">Isi Materi</label>
+                <textarea id="materialContent" placeholder="Tuliskan isi materi di sini..." required></textarea>
+              </div>
+              <button class="primary" type="submit">Simpan Materi</button>
+              <button class="secondary" type="button" onclick="showLecturerSection('lecturerDashboard')">Batal</button>
+            </form>
+            <div id="saveMessage" aria-live="polite"></div>
+          </div>
+
+          <div id="lecturerMaterialsSection" class="panel hidden">
+            <h2>Daftar Materi</h2>
+            <p class="subtitle">Materi yang sudah ditambahkan.</p>
+            <div id="lecturerMaterialsList"></div>
+          </div>
+
+          <div id="lecturerDiscussionSection" class="panel hidden">
+            <h2>Diskusi dengan Mahasiswa</h2>
+            <p class="subtitle">Kirim pengumuman atau tanggapi pertanyaan mahasiswa.</p>
+            <div id="lecturerChatBox" class="chat-box"></div>
+            <form id="lecturerChatForm">
+              <div class="form-group">
+                <label for="lecturerChatMessage">Pesan</label>
+                <textarea id="lecturerChatMessage" placeholder="Tulis pesan untuk mahasiswa..." required></textarea>
+              </div>
+              <button class="primary" type="submit">Kirim Pesan</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HALAMAN MAHASISWA -->
+    <section id="studentPage" class="hidden">
+      <h2 class="page-title">Dashboard Mahasiswa</h2>
+      <p class="subtitle">Selamat belajar! Pilih materi untuk dibaca atau kerjakan kuis untuk menguji pemahamanmu.</p>
+      <div class="layout">
+        <aside class="sidebar">
+          <h3>Menu Mahasiswa</h3>
+          <button class="active" onclick="showStudentSection('studentMaterialsSection', this)">▤ Materi</button>
+          <button onclick="showStudentSection('quizSection', this)">☑ Kuis</button>
+          <button onclick="showStudentSection('studentDiscussionSection', this); renderDiscussion()">💬 Diskusi</button>
+          <button onclick="showHome()">↩ Beranda</button>
+        </aside>
+        <div>
+          <div id="studentMaterialsSection" class="panel">
+            <h2>Materi Pembelajaran</h2>
+            <p class="subtitle">Pilih materi yang ingin kamu pelajari.</p>
+            <div id="studentMaterialsList"></div>
+            <button class="secondary" onclick="showHome()">← Kembali ke Beranda</button>
+          </div>
+
+          <div id="readMaterialSection" class="panel hidden">
+            <h2 id="readTitle">Judul Materi</h2>
+            <p id="readDescription" class="subtitle"></p>
+            <div id="readContent" style="line-height:1.8; white-space:pre-wrap"></div>
+            <br>
+            <button class="secondary" onclick="showStudentSection('studentMaterialsSection')">← Kembali ke Daftar Materi</button>
+          </div>
+
+          <div id="quizSection" class="panel hidden">
+            <h2>Kuis Literasi Digital</h2>
+            <p class="subtitle">Pilih satu jawaban yang paling tepat untuk setiap pertanyaan.</p>
+            <form id="quizForm">
+              <div class="question">
+                <b>1. Apa yang dimaksud dengan literasi digital?</b>
+                <label class="option"><input type="radio" name="q1" value="a"> Kemampuan menggunakan teknologi digital secara bijak</label>
+                <label class="option"><input type="radio" name="q1" value="b"> Kemampuan mengetik dengan cepat</label>
+                <label class="option"><input type="radio" name="q1" value="c"> Kemampuan bermain gim</label>
+              </div>
+              <div class="question">
+                <b>2. Apa yang sebaiknya dilakukan sebelum membagikan informasi?</b>
+                <label class="option"><input type="radio" name="q2" value="a"> Langsung menyebarkannya</label>
+                <label class="option"><input type="radio" name="q2" value="b"> Memeriksa kebenaran sumber informasi</label>
+                <label class="option"><input type="radio" name="q2" value="c"> Mengubah isi informasinya</label>
+              </div>
+              <div class="question">
+                <b>3. Mengapa kita perlu menjaga kata sandi?</b>
+                <label class="option"><input type="radio" name="q3" value="a"> Agar mudah diketahui orang lain</label>
+                <label class="option"><input type="radio" name="q3" value="b"> Agar bisa dibagikan ke semua teman</label>
+                <label class="option"><input type="radio" name="q3" value="c"> Untuk melindungi akun dan data pribadi</label>
+              </div>
+              <button class="primary" type="submit">Kirim Jawaban</button>
+            </form>
+            <div id="quizResult" aria-live="polite"></div>
+          </div>
+
+          <div id="studentDiscussionSection" class="panel hidden">
+            <h2>Diskusi dengan Dosen</h2>
+            <p class="subtitle">Ajukan pertanyaan atau tanggapi pesan dosen.</p>
+            <div id="studentChatBox" class="chat-box"></div>
+            <form id="studentChatForm">
+              <div class="form-group">
+                <label for="studentChatMessage">Pesan</label>
+                <textarea id="studentChatMessage" placeholder="Tulis pertanyaan atau tanggapan..." required></textarea>
+              </div>
+              <button class="primary" type="submit">Kirim Pesan</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>EduConnect · Media Pembelajaran Digital untuk Dosen dan Mahasiswa</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://natlzfzrpourypbfhjed.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_DXb9JusIzNv2SjegNTjKZw_H7fBm2ep";
+    const supabaseClient = window.supabase &&
+      SUPABASE_URL.startsWith("https://") &&
+      SUPABASE_ANON_KEY !== "GANTI_DENGAN_SUPABASE_ANON_KEY"
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+      : null;
+
+    const pages = ["homePage", "aboutPage", "loginPage", "lecturerPage", "studentPage"];
+    let selectedLoginRole = "lecturer";
+    let accountMode = "login";
+    let currentAccount = null;
+    let materials = [];
+    let discussionMessages = [];
+    let discussionChannel = null;
+
+    function showAppStatus(message) {
+      const status = document.getElementById("appStatus");
+      status.textContent = message;
+      status.classList.toggle("hidden", !message);
+    }
+
+    function requireSupabase() {
+      if (supabaseClient) return true;
+      const message = "Koneksi Supabase belum dikonfigurasi. Isi Project URL dan anon key terlebih dahulu.";
+      document.getElementById("loginError").textContent = message;
+      showAppStatus(message);
+      return false;
+    }
+
+    function updateHeaderAccount() {
+      const loginButton = document.getElementById("headerLoginButton");
+      const profile = document.getElementById("headerProfile");
+      if (!currentAccount) {
+        loginButton.classList.remove("hidden");
+        profile.classList.add("hidden");
+        return;
+      }
+
+      loginButton.classList.add("hidden");
+      profile.classList.remove("hidden");
+      document.getElementById("profileName").textContent = currentAccount.name;
+      document.getElementById("profileAvatar").textContent =
+        currentAccount.name.trim().charAt(0).toUpperCase();
+    }
+
+    function toggleProfileMenu() {
+      const dropdown = document.getElementById("profileDropdown");
+      const button = dropdown.previousElementSibling;
+      dropdown.classList.toggle("hidden");
+      button.setAttribute("aria-expanded", String(!dropdown.classList.contains("hidden")));
+    }
+
+    function openDashboard() {
+      document.getElementById("profileDropdown").classList.add("hidden");
+      if (!currentAccount) return;
+      if (currentAccount.role === "lecturer") {
+        openLecturer();
+      } else {
+        openStudent();
+      }
+    }
+
+    async function logout() {
+      if (supabaseClient) {
+        const { error } = await supabaseClient.auth.signOut();
+        if (error) {
+          showAppStatus("Gagal keluar: " + error.message);
+          return;
+        }
+        if (discussionChannel) {
+          await supabaseClient.removeChannel(discussionChannel);
+          discussionChannel = null;
+        }
+      }
+      currentAccount = null;
+      selectedLoginRole = "lecturer";
+      document.getElementById("profileDropdown").classList.add("hidden");
+      updateHeaderAccount();
+      showAppStatus("");
+      showHome();
+    }
+
+    function showPage(pageId) {
+      pages.forEach(id => document.getElementById(id).classList.add("hidden"));
+      document.getElementById(pageId).classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showHome() {
+      showPage("homePage");
+    }
+
+    function showAbout() {
+      showPage("aboutPage");
+    }
+
+    function openLogin(role = "lecturer") {
+      if (currentAccount) {
+        if (currentAccount.role === role) {
+          openDashboard();
+        } else {
+          showAppStatus("Anda sudah masuk sebagai " +
+            (currentAccount.role === "lecturer" ? "Dosen." : "Mahasiswa.") +
+            " Keluar terlebih dahulu untuk memakai peran lain.");
+        }
+        return;
+      }
+      showPage("loginPage");
+      selectLoginRole(role);
+      setAccountMode("login");
+      document.getElementById("loginError").textContent = "";
+      document.getElementById("loginEmail").focus();
+    }
+
+    function setAccountMode(mode) {
+      accountMode = mode;
+      const isRegister = mode === "register";
+      document.getElementById("loginTitle").textContent = isRegister ? "Buat Akun Baru" : "Masuk ke Akun";
+      document.getElementById("loginSubmitButton").textContent = isRegister ? "Daftar Sekarang" : "Masuk";
+      document.getElementById("accountToggle").textContent = isRegister
+        ? "Sudah punya akun? Masuk"
+        : "Belum punya akun? Buat akun baru";
+      document.getElementById("registerNameGroup").classList.toggle("hidden", !isRegister);
+      document.getElementById("confirmPasswordGroup").classList.toggle("hidden", !isRegister);
+      document.getElementById("registerName").required = isRegister;
+      document.getElementById("confirmPassword").required = isRegister;
+      document.getElementById("loginPassword").autocomplete = isRegister ? "new-password" : "current-password";
+      document.getElementById("loginError").style.color = "";
+      document.getElementById("loginError").textContent = "";
+    }
+
+    function toggleAccountMode() {
+      setAccountMode(accountMode === "login" ? "register" : "login");
+    }
+
+    function selectLoginRole(role) {
+      selectedLoginRole = role;
+      document.getElementById("lecturerRoleButton").classList.toggle("active", role === "lecturer");
+      document.getElementById("studentRoleButton").classList.toggle("active", role === "student");
+    }
+
+    function togglePassword() {
+      const password = document.getElementById("loginPassword");
+      const button = password.parentElement.querySelector(".password-toggle");
+      const showPassword = password.type === "password";
+      password.type = showPassword ? "text" : "password";
+      button.textContent = showPassword ? "Sembunyi" : "Tampil";
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+      const error = document.getElementById("loginError");
+
+      if (!requireSupabase()) return;
+
+      if (accountMode === "register") {
+        const name = document.getElementById("registerName").value.trim();
+        const confirmation = document.getElementById("confirmPassword").value;
+
+        if (!name) {
+          error.textContent = "Nama lengkap wajib diisi.";
+          return;
+        }
+        if (password !== confirmation) {
+          error.textContent = "Konfirmasi kata sandi tidak sama.";
+          return;
+        }
+
+        const { data, error: signUpError } = await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: { data: { name, role: selectedLoginRole } }
+        });
+        if (signUpError) {
+          const message = signUpError.message.toLowerCase();
+          error.textContent = message.includes("rate limit") && message.includes("email")
+            ? "Batas pengiriman email Supabase tercapai. Tunggu sebelum mencoba lagi, atau nonaktifkan verifikasi email sementara di Authentication → Providers → Email untuk pengujian."
+            : signUpError.message;
+          return;
+        }
+
+        if (data.session) {
+          try {
+            await completeLogin(data.user, selectedLoginRole);
+            this.reset();
+          } catch (profileError) {
+            error.textContent = profileError.message;
+          }
+        } else {
+          error.style.color = "#176044";
+          error.textContent = "Akun dibuat. Periksa email untuk verifikasi sebelum masuk.";
+          this.reset();
+          setAccountMode("login");
+        }
+        return;
+      }
+
+      const { data, error: signInError } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (signInError) {
+        error.textContent = signInError.message;
+        return;
+      }
+
+      try {
+        await completeLogin(data.user, selectedLoginRole);
+        this.reset();
+      } catch (profileError) {
+        error.textContent = profileError.message;
+      }
+    });
+
+    async function completeLogin(user, expectedRole) {
+      const { data: profile, error } = await supabaseClient
+        .from("profiles")
+        .select("id, name, role")
+        .eq("id", user.id)
+        .single();
+      if (error) throw new Error("Gagal memuat profil: " + error.message);
+      if (expectedRole && profile.role !== expectedRole) {
+        await supabaseClient.auth.signOut();
+        const roleName = profile.role === "lecturer" ? "Dosen" : "Mahasiswa";
+        throw new Error("Akun ini terdaftar sebagai " + roleName + ". Pilih peran tersebut saat login.");
+      }
+
+      if (profile.role === "lecturer") await migrateLegacyMaterials(profile.id);
+      const metadataName = user.user_metadata && user.user_metadata.name;
+      currentAccount = {
+        ...profile,
+        name: profile.name === "Pengguna" && metadataName ? metadataName : profile.name,
+        email: user.email
+      };
+      selectedLoginRole = profile.role;
+      updateHeaderAccount();
+      await loadMaterials();
+      await renderDiscussion();
+      subscribeToDiscussion();
+
+      if (profile.role === "lecturer") {
+        await openLecturer();
+      } else {
+        await openStudent();
+      }
+    }
+
+    function subscribeToDiscussion() {
+      if (!supabaseClient || !currentAccount) return;
+      if (discussionChannel) supabaseClient.removeChannel(discussionChannel);
+      discussionChannel = supabaseClient
+        .channel("educonnect-discussion")
+        .on("postgres_changes", {
+          event: "*",
+          schema: "public",
+          table: "messages"
+        }, () => renderDiscussion())
+        .subscribe(status => {
+          if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+            showAppStatus("Pesan tersimpan, tetapi pembaruan langsung diskusi tidak terhubung. Muat ulang untuk melihat pesan terbaru.");
+          } else if (status === "SUBSCRIBED") {
+            showAppStatus("");
+          }
+        });
+    }
+
+    async function migrateLegacyMaterials(lecturerId) {
+      const migrationKey = "educonnectLegacyMaterialsMigrated:" + lecturerId;
+      if (localStorage.getItem(migrationKey) === "true") return;
+
+      const legacyData = localStorage.getItem("educonnectMaterials");
+      if (!legacyData) {
+        localStorage.setItem(migrationKey, "true");
+        return;
+      }
+
+      let legacyMaterials;
+      try {
+        legacyMaterials = JSON.parse(legacyData);
+      } catch (error) {
+        throw new Error("Materi lama di perangkat ini tidak bisa dibaca. Periksa data browser sebelum melanjutkan.");
+      }
+      if (!Array.isArray(legacyMaterials)) {
+        throw new Error("Format materi lama tidak valid dan tidak dapat disinkronkan.");
+      }
+      if (legacyMaterials.length === 0) {
+        localStorage.setItem(migrationKey, "true");
+        return;
+      }
+
+      const rows = legacyMaterials.map(item => ({
+        lecturer_id: lecturerId,
+        title: String(item.title || ""),
+        description: String(item.description || ""),
+        content: String(item.content || "")
+      }));
+      if (rows.some(item => !item.title || !item.description || !item.content)) {
+        throw new Error("Ada materi lama yang tidak lengkap; data tidak diunggah.");
+      }
+
+      const { error } = await supabaseClient.from("materials").insert(rows);
+      if (error) throw new Error("Gagal menyinkronkan materi lama: " + error.message);
+      localStorage.setItem(migrationKey, "true");
+      showAppStatus(legacyMaterials.length + " materi lama dari perangkat ini sudah disinkronkan.");
+    }
+
+    async function loadMaterials() {
+      const { data, error } = await supabaseClient
+        .from("materials")
+        .select("id, title, description, content")
+        .order("created_at", { ascending: false });
+      if (error) throw new Error("Gagal memuat materi: " + error.message);
+      materials = data || [];
+      updateLecturerCount();
+      renderLecturerMaterials();
+      renderStudentMaterials();
+    }
+
+    async function openLecturer() {
+      showPage("lecturerPage");
+      showLecturerSection("lecturerDashboard");
+      updateLecturerCount();
+    }
+
+    async function openStudent() {
+      showPage("studentPage");
+      showStudentSection("studentMaterialsSection");
+      renderStudentMaterials();
+    }
+
+    function showLecturerSection(sectionId, button) {
+      ["lecturerDashboard", "addMaterialSection", "lecturerMaterialsSection", "lecturerDiscussionSection"].forEach(id => {
+        document.getElementById(id).classList.add("hidden");
+      });
+      document.getElementById(sectionId).classList.remove("hidden");
+
+      document.querySelectorAll("#lecturerPage .sidebar button").forEach(btn => btn.classList.remove("active"));
+      if (button) button.classList.add("active");
+      updateLecturerCount();
+    }
+
+    function showStudentSection(sectionId, button) {
+      ["studentMaterialsSection", "readMaterialSection", "quizSection", "studentDiscussionSection"].forEach(id => {
+        document.getElementById(id).classList.add("hidden");
+      });
+      document.getElementById(sectionId).classList.remove("hidden");
+
+      document.querySelectorAll("#studentPage .sidebar button").forEach(btn => btn.classList.remove("active"));
+      if (button) button.classList.add("active");
+
+      if (sectionId === "studentMaterialsSection") renderStudentMaterials();
+    }
+
+    // Menyimpan materi baru dari formulir dosen.
+    document.getElementById("materialForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const newMaterial = {
+        title: document.getElementById("materialTitle").value.trim(),
+        description: document.getElementById("materialDescription").value.trim(),
+        content: document.getElementById("materialContent").value.trim(),
+        lecturer_id: currentAccount.id
+      };
+
+      const { error } = await supabaseClient.from("materials").insert(newMaterial);
+      if (error) {
+        document.getElementById("saveMessage").textContent = "Gagal menyimpan materi: " + error.message;
+        return;
+      }
+
+      this.reset();
+      document.getElementById("saveMessage").innerHTML =
+        '<div class="notice">Materi berhasil disimpan dan dapat diakses dari perangkat lain.</div>';
+      await loadMaterials();
+    });
+
+    function updateLecturerCount() {
+      document.getElementById("lecturerCount").textContent =
+        "Jumlah materi yang tersimpan: " + materials.length;
+    }
+
+    function renderLecturerMaterials() {
+      const list = document.getElementById("lecturerMaterialsList");
+      if (materials.length === 0) {
+        list.innerHTML = '<div class="empty">Belum ada materi. Silakan tambahkan materi terlebih dahulu.</div>';
+        return;
+      }
+
+      list.innerHTML = materials.map(item => `
+        <article class="material">
+          <h3>${escapeHTML(item.title)}</h3>
+          <small>${escapeHTML(item.description)}</small>
+          <div class="material-actions">
+            <button class="danger" onclick="deleteMaterial(${item.id})">Hapus</button>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function renderStudentMaterials() {
+      const list = document.getElementById("studentMaterialsList");
+      if (materials.length === 0) {
+        list.innerHTML = '<div class="empty">Belum ada materi dari dosen. Silakan kembali setelah dosen menambahkan materi.</div>';
+        return;
+      }
+
+      list.innerHTML = materials.map(item => `
+        <article class="material">
+          <h3>${escapeHTML(item.title)}</h3>
+          <p>${escapeHTML(item.description)}</p>
+          <button class="primary" onclick="readMaterial(${item.id})">Baca Materi →</button>
+        </article>
+      `).join("");
+    }
+
+    function readMaterial(id) {
+      const item = materials.find(material => material.id === id);
+      if (!item) return;
+
+      document.getElementById("readTitle").textContent = item.title;
+      document.getElementById("readDescription").textContent = item.description;
+      document.getElementById("readContent").textContent = item.content;
+      showStudentSection("readMaterialSection");
+    }
+
+    async function deleteMaterial(id) {
+      if (!confirm("Yakin ingin menghapus materi ini?")) return;
+      const { error } = await supabaseClient.from("materials").delete().eq("id", id);
+      if (error) {
+        alert("Gagal menghapus materi: " + error.message);
+        return;
+      }
+      await loadMaterials();
+    }
+
+    // Mencegah teks yang diketik pengguna dibaca sebagai kode HTML.
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[character]);
+    }
+
+    async function sendDiscussion(messageId, formId) {
+      const input = document.getElementById(messageId);
+      const message = input.value.trim();
+      if (!message || !currentAccount) return;
+
+      const { error } = await supabaseClient.from("messages").insert({
+        sender_id: currentAccount.id,
+        message
+      });
+      if (error) {
+        alert("Gagal mengirim pesan: " + error.message);
+        return;
+      }
+      document.getElementById(formId).reset();
+      await renderDiscussion();
+    }
+
+    async function renderDiscussion() {
+      const boxes = [
+        document.getElementById("lecturerChatBox"),
+        document.getElementById("studentChatBox")
+      ];
+
+      if (!supabaseClient || !currentAccount) {
+        discussionMessages = [];
+      } else {
+        const { data, error } = await supabaseClient
+          .from("messages")
+          .select("id, sender_id, message, created_at, profiles!messages_sender_id_fkey(name, role)")
+          .order("created_at", { ascending: true });
+        if (error) {
+          boxes.forEach(box => {
+            box.innerHTML = `<div class="empty">Gagal memuat diskusi: ${escapeHTML(error.message)}</div>`;
+          });
+          return;
+        }
+        discussionMessages = data || [];
+      }
+
+      boxes.forEach(box => {
+        if (discussionMessages.length === 0) {
+          box.innerHTML = '<div class="empty">Belum ada pesan diskusi.</div>';
+          return;
+        }
+
+        box.innerHTML = discussionMessages.map(item => {
+          const mine = currentAccount && item.sender_id === currentAccount.id;
+          const profile = item.profiles || {};
+          return `
+            <article class="chat-message ${mine ? "mine" : ""}">
+              <small>${escapeHTML(profile.name || "Pengguna")} · ${profile.role === "lecturer" ? "Dosen" : "Mahasiswa"} · ${escapeHTML(new Date(item.created_at).toLocaleString("id-ID"))}</small>
+              <p>${escapeHTML(item.message)}</p>
+            </article>
+          `;
+        }).join("");
+        box.scrollTop = box.scrollHeight;
+      });
+    }
+
+    document.getElementById("lecturerChatForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+      await sendDiscussion("lecturerChatMessage", "lecturerChatForm");
+    });
+
+    document.getElementById("studentChatForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+      await sendDiscussion("studentChatMessage", "studentChatForm");
+    });
+
+    // Memeriksa jawaban kuis dan menghitung nilai.
+    document.getElementById("quizForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const correctAnswers = { q1: "a", q2: "b", q3: "c" };
+      const formData = new FormData(this);
+      let score = 0;
+
+      Object.keys(correctAnswers).forEach(question => {
+        if (formData.get(question) === correctAnswers[question]) score++;
+      });
+
+      const finalScore = Math.round((score / 3) * 100);
+      document.getElementById("quizResult").innerHTML =
+        `<div class="notice"><b>Kuis selesai!</b><br>Jawaban benar: ${score} dari 3 soal.<br>Nilai kamu: <b>${finalScore}</b></div>`;
+    });
+
+    async function initializeApp() {
+      updateHeaderAccount();
+      updateLecturerCount();
+      if (!supabaseClient) {
+        showAppStatus("Aplikasi belum terhubung ke Supabase. Atur URL dan anon key untuk menyinkronkan akun, materi, dan diskusi.");
+        await renderDiscussion();
+        return;
+      }
+
+      const { data, error } = await supabaseClient.auth.getSession();
+      if (error) {
+        showAppStatus("Gagal memulihkan sesi login: " + error.message);
+        return;
+      }
+      if (data.session) {
+        try {
+          await completeLogin(data.session.user);
+        } catch (sessionError) {
+          showAppStatus(sessionError.message);
+        }
+      }
+      await renderDiscussion();
+    }
+
+    initializeApp();
+  </script>
+</body>
+</html>
